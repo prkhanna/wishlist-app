@@ -8,24 +8,45 @@ jobs:
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Define the number of parallel jobs
-        shard: [1, 2]  # This will create 2 parallel jobs
     steps:
     - uses: actions/checkout@v4
+    
+    - name: Cache node modules
+      uses: actions/cache@v3
+      id: node-cache
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    
+    - name: Cache Playwright browsers
+      uses: actions/cache@v3
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
+    
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+    
     - name: Install dependencies
+      if: steps.node-cache.outputs.cache-hit != 'true'
       run: npm ci
+    
     - name: Install Playwright Browsers
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
+    
     - name: Run Playwright tests
-      run: npx playwright test --shard=${{ matrix.shard }}/2
+      run: npx playwright test
+    
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report-${{ matrix.shard }}
+        name: playwright-report
         path: playwright-report/
         retention-days: 30

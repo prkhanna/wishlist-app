@@ -4,9 +4,12 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:parallel": "playwright test --workers=2",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "test:parallel:headed": "playwright test --headed --workers=2",
+    "test:parallel:debug": "playwright test --debug --workers=2"
   },
   "keywords": [],
   "author": "",
