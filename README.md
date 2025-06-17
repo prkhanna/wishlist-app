@@ -26,6 +26,29 @@ This repository contains end-to-end tests for the Wishlist application using Pla
    npx playwright install
    ```
 
+4. **Set up environment variables**
+   Create a `.env` file in the root directory with the following variables:
+   ```
+   PLAYWRIGHT_USERNAME=your_username
+   PLAYWRIGHT_PASSWORD=your_password
+   PLAYWRIGHT_BASE_URL=your_base_url
+   ```
+
+## GitHub Actions Setup
+
+To run tests in GitHub Actions, you need to set up repository secrets:
+
+1. Go to your GitHub repository
+2. Click on "Settings"
+3. In the left sidebar, click on "Secrets and variables" → "Actions"
+4. Click on "New repository secret"
+5. Add the following secrets:
+   - `PLAYWRIGHT_BASE_URL`: Your application's base URL
+   - `PLAYWRIGHT_USERNAME`: Your test user's email/username
+   - `PLAYWRIGHT_PASSWORD`: Your test user's password
+
+These secrets will be used by the GitHub Actions workflow to authenticate and run tests.
+
 ## Running Tests Locally
 
 ### Basic Test Run
